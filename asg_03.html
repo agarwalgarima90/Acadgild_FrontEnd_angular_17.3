@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+        <head> 
+                <title>Assignment Cache Factory</title>
+                <script SRC="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.13/angular.js"></script>
+                <script>
+                        var app = angular.module("cacheFactory", []);
+                        app.controller("CacheFactoryController", ['$scope', '$cacheFactory', function($scope, $cacheFactory) {
+                                $scope.key = "";
+                                $scope.value = "";
+                                $scope.currentItem = "";
+                                $scope.keys = [];
+                                $scope.cache = $cacheFactory('testCache');
+
+                                $scope.addItems = function() {
+                                        $scope.keys.push($scope.key);
+                                        $scope.cache.put($scope.key, $scope.value);
+                                };
+
+                                $scope.getItem = function() {
+                                        $scope.currentItem = $scope.cache.get($scope.serachkey);
+                                        if (!$scope.currentItem) {
+                                                alert("no entry found for the key");
+                                        }
+                                };
+
+                                $scope.removeItem = function() {
+                                        $scope.keys = $scope.keys.filter(function(key) {
+                                                return (key !== $scope.removeKey);
+                                        });
+                                        $scope.cache.remove($scope.removeKey);
+                                };
+
+                                $scope.removeAll  = function() {
+                                        for(i = 0; i < $scope.keys.length; i++) {
+                                                $scope.cache.remove($scope.keys[i]);
+                                        }
+                                        $scope.keys = [];
+                                        alert("All entries deleted");
+                                };
+
+                                $scope.destroyCache = function() {
+                                        $scope.cache.destroy();
+                                };
+
+                                
+                        }]);
+                </script>
+        </head>
+        <body ng-app="cacheFactory">
+                <fieldset style="background-color: #DDE4E9">
+                        <legend> AngularJS Cache Factory Example</legend>
+                        <div ng-controller="CacheFactoryController">
+                                <p>Key: <input type="text" ng-model="key"/></p>
+                                <p>Value: <input type="text" ng-model="value"/></p>
+                                <p><button ng-click="addItems()">Add Items</button></p>
+
+                                <p>Get Item: <input type="text" ng-model="serachkey">
+                                        <button ng-click="getItem()">Get Items</button><br/>
+
+                                        <p style="font-family:Arial;color:yellow;background-color:steelblue;padding;3px">Item: {{currentItem}}</p>
+                                </p>
+
+                                <p> Remove Item:
+                                        <input type="text" ng-model="removeKey">
+                                        <button ng-click="removeItem()">Remove Item</button>
+                                </p>
+                                <p> <button ng-click="removeAll()">Remove All</button>
+                                <p> <button ng-click="destroyCache()">Destroy</button>
+                        </div>
+                </fieldset>
+        </body>
+</html>
